@@ -66,6 +66,7 @@ struct PerformanceView: View {
             }
             .padding(20)
         }
+        .background(Theme.contentBackground)
         .onAppear { model.start() }
         .onDisappear { model.stop() }
     }
@@ -87,7 +88,8 @@ private struct MetricCard<Content: View>: View {
             content()
         }
         .padding(16)
-        .background(RoundedRectangle(cornerRadius: 10).fill(.thinMaterial))
+        .background(RoundedRectangle(cornerRadius: 10).fill(Theme.cardBackground))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Theme.separator, lineWidth: 1))
     }
 }
 
@@ -97,7 +99,7 @@ private struct ProgressBar: View {
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 4).fill(Color.gray.opacity(0.25))
+                RoundedRectangle(cornerRadius: 4).fill(Color.white.opacity(0.08))
                 RoundedRectangle(cornerRadius: 4)
                     .fill(color)
                     .frame(width: geo.size.width * CGFloat(min(max(fraction, 0), 1)))
@@ -106,7 +108,7 @@ private struct ProgressBar: View {
     }
 
     private var color: Color {
-        fraction > 0.85 ? .red : (fraction > 0.6 ? .orange : .accentColor)
+        fraction > 0.85 ? .red : (fraction > 0.6 ? .orange : Theme.accent)
     }
 }
 
@@ -115,9 +117,10 @@ private struct SparklineView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let maxV = max(values.max() ?? 1, 1)
+            let maxV = max(values.max() ?? 1, 100)
             let stepX = geo.size.width / CGFloat(max(values.count - 1, 1))
-            Path { path in
+
+            let linePath = Path { path in
                 for (i, v) in values.enumerated() {
                     let x = CGFloat(i) * stepX
                     let y = geo.size.height * (1 - CGFloat(v / maxV))
@@ -125,7 +128,22 @@ private struct SparklineView: View {
                     else { path.addLine(to: CGPoint(x: x, y: y)) }
                 }
             }
-            .stroke(Color.accentColor, lineWidth: 1.5)
+
+            let fillPath = Path { path in
+                path.addPath(linePath)
+                path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height))
+                path.addLine(to: CGPoint(x: 0, y: geo.size.height))
+                path.closeSubpath()
+            }
+
+            fillPath.fill(
+                LinearGradient(
+                    colors: [Theme.accent.opacity(0.35), Theme.accent.opacity(0.02)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            linePath.stroke(Theme.accent, lineWidth: 1.5)
         }
     }
 }

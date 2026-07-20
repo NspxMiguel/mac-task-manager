@@ -31,7 +31,7 @@ struct SettingsView: View {
                         settings.resetToDefault()
                     }
                 }
-                Text("Padrão: ⌘⎋ (Cmd + Esc). Clique no atalho e pressione a nova combinação desejada.")
+                Text("Padrão: ⌘⇧⎋ (Cmd + Shift + Esc). Clique no atalho e pressione a nova combinação desejada.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } header: {
@@ -47,8 +47,10 @@ struct SettingsView: View {
                 Text("Inicialização")
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(Theme.contentBackground)
         .padding(20)
-        .frame(width: 420)
+        .frame(maxWidth: 480, alignment: .leading)
         .onAppear {
             if #available(macOS 13.0, *) {
                 launchAtLogin = SMAppService.mainApp.status == .enabled

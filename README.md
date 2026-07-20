@@ -4,7 +4,7 @@
 
 **O Task Manager do Windows 11, nativo pro macOS.**
 
-Lista de processos ao vivo, gráficos de CPU/memória/disco e um atalho global configurável — padrão `⌘⎋` (Cmd+Esc) — pra abrir de qualquer lugar, igual `Ctrl+Shift+Esc` no Windows.
+Lista de processos ao vivo, gráficos de CPU/memória/disco e um atalho global configurável — padrão `⌘⇧⎋` (Cmd+Shift+Esc) — pra abrir de qualquer lugar, igual `Ctrl+Shift+Esc` no Windows.
 
 [![Release](https://img.shields.io/github/v/release/spxmiguel/mac-task-manager?label=release&color=0a84ff)](https://github.com/spxmiguel/mac-task-manager/releases)
 [![Platform](https://img.shields.io/badge/platform-macOS%2013%2B-black?logo=apple)](#requisitos)
@@ -38,7 +38,7 @@ Build local também significa **sem aviso de Gatekeeper** ("desenvolvedor não i
 > brew trust --cask spxmiguel/tap/task-manager
 > ```
 
-Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `⌘⎋` já funciona de cara.
+Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `⌘⇧⎋` já funciona de cara.
 
 ---
 
@@ -48,7 +48,7 @@ Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `�
 |---|---|
 | **Processos** | Lista ao vivo (atualiza a cada 2s), ordenável por nome / PID / CPU / memória, busca por nome ou PID, `Finalizar tarefa` com confirmação, `Forçar encerramento` no menu de contexto. Uso de CPU acima de 50% aparece em vermelho. |
 | **Desempenho** | CPU com gráfico em tempo real, memória e disco — lidos direto via APIs nativas do sistema (Mach/Darwin), sem shell out. |
-| **Ajustes** | Atalho global gravável na hora (clique e pressione a combinação desejada), padrão `⌘⎋`. Opção de abrir automaticamente no login. |
+| **Ajustes** | Atalho global gravável na hora (clique e pressione a combinação desejada), padrão `⌘⇧⎋`. Opção de abrir automaticamente no login. |
 | **Barra de menu** | Ícone fixo: clique para abrir/fechar a janela, clique com o botão direito para `Mostrar/Ocultar` ou `Sair` do app. |
 
 ---

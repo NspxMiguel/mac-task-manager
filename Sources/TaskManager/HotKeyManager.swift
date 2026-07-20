@@ -6,9 +6,9 @@ struct KeyCombo: Codable, Equatable {
     var keyCode: UInt32
     var modifiers: UInt32 // Carbon modifier flags (cmdKey, optionKey, controlKey, shiftKey)
 
-    static let defaultCombo = KeyCombo(keyCode: UInt32(kVK_Escape), modifiers: UInt32(cmdKey))
+    static let defaultCombo = KeyCombo(keyCode: UInt32(kVK_Escape), modifiers: UInt32(cmdKey) | UInt32(shiftKey))
 
-    /// Human readable representation, e.g. "⌘⎋"
+    /// Human readable representation, e.g. "⌘⇧⎋"
     var displayString: String {
         var s = ""
         if modifiers & UInt32(controlKey) != 0 { s += "⌃" }

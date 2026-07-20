@@ -70,39 +70,63 @@ struct ProcessListView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
-                TextField("Buscar processo ou PID", text: $model.searchText)
-                    .textFieldStyle(.plain)
+            HStack(spacing: 10) {
+                HStack(spacing: 6) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                        .font(.system(size: 12))
+                    TextField("Buscar processo ou PID", text: $model.searchText)
+                        .textFieldStyle(.plain)
+                        .font(.system(size: 12))
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(RoundedRectangle(cornerRadius: 7).fill(Color.white.opacity(0.06)))
+
                 Spacer()
+
                 Button {
                     model.refresh()
                 } label: {
                     Image(systemName: "arrow.clockwise")
                 }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
                 .help("Atualizar agora")
 
-                Button(role: .destructive) {
+                Button {
                     if let pid = model.selectedPID {
                         pendingKillPID = pid
                         showKillConfirm = true
                     }
                 } label: {
-                    Label("Finalizar tarefa", systemImage: "xmark.octagon")
+                    Label("Finalizar tarefa", systemImage: "xmark.octagon.fill")
+                        .font(.system(size: 12, weight: .medium))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
                 }
+                .buttonStyle(.plain)
+                .foregroundStyle(model.selectedPID == nil ? Color.secondary : Color.white)
+                .background(
+                    RoundedRectangle(cornerRadius: 7)
+                        .fill(model.selectedPID == nil ? Color.white.opacity(0.06) : Color.red.opacity(0.85))
+                )
                 .disabled(model.selectedPID == nil)
             }
-            .padding(10)
+            .padding(12)
 
-            Divider()
+            Divider().overlay(Theme.separator)
 
             header
 
-            Divider()
+            Divider().overlay(Theme.separator)
 
             List(model.filteredSorted, selection: $model.selectedPID) { proc in
                 ProcessRow(process: proc)
+                    .listRowBackground(
+                        model.selectedPID == proc.pid ? Theme.accent.opacity(0.35) : Color.clear
+                    )
+                    .listRowSeparatorTint(Theme.separator)
                     .tag(proc.pid)
                     .contextMenu {
                         Button("Finalizar tarefa") {
@@ -115,7 +139,9 @@ struct ProcessListView: View {
                     }
             }
             .listStyle(.plain)
+            .scrollContentBackground(.hidden)
         }
+        .background(Theme.contentBackground)
         .onAppear { model.start() }
         .onDisappear { model.stop() }
         .alert("Finalizar esta tarefa?", isPresented: $showKillConfirm, presenting: pendingKillPID) { pid in
@@ -141,7 +167,7 @@ struct ProcessListView: View {
         }
         .font(.caption.bold())
         .foregroundStyle(.secondary)
-        .padding(.horizontal, 10)
+        .padding(.horizontal, 22)
         .padding(.vertical, 6)
     }
 
@@ -170,22 +196,45 @@ struct ProcessListView: View {
 struct ProcessRow: View {
     let process: ProcessInfoEntry
 
+    private var cpuFraction: Double { process.cpuPercent / 100 }
+    private var memFraction: Double { min(process.memoryMB / 1024, 1) }
+
     var body: some View {
         HStack(spacing: 0) {
-            Text(process.name)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(Theme.accent.opacity(0.6))
+                    .frame(width: 6, height: 6)
+                Text(process.name)
+                    .lineLimit(1)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
             Text("\(process.pid)")
                 .frame(width: 70, alignment: .trailing)
                 .foregroundStyle(.secondary)
-            Text(String(format: "%.1f%%", process.cpuPercent))
-                .frame(width: 80, alignment: .trailing)
+
+            heatCell(String(format: "%.1f%%", process.cpuPercent), fraction: cpuFraction, width: 80)
                 .foregroundStyle(process.cpuPercent > 50 ? .red : .primary)
-            Text(String(format: "%.0f MB", process.memoryMB))
-                .frame(width: 100, alignment: .trailing)
+
+            heatCell(String(format: "%.0f MB", process.memoryMB), fraction: memFraction, width: 100)
                 .foregroundStyle(.secondary)
         }
         .font(.system(size: 12, design: .monospaced))
-        .padding(.vertical, 2)
+        .padding(.vertical, 4)
+    }
+
+    private func heatCell(_ text: String, fraction: Double, width: CGFloat) -> some View {
+        Text(text)
+            .frame(width: width, alignment: .trailing)
+            .padding(.vertical, 2)
+            .background(
+                HStack {
+                    Spacer(minLength: 0)
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Theme.heat(fraction))
+                        .frame(width: width)
+                }
+            )
     }
 }
