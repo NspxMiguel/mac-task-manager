@@ -51,6 +51,7 @@ cat > "${APP_BUNDLE}/Contents/Info.plist" <<PLIST
 PLIST
 
 echo "==> Assinando (ad-hoc)..."
+xattr -cr "${APP_BUNDLE}"
 codesign --force --deep -s - "${APP_BUNDLE}"
 
 echo "==> Pronto: $(pwd)/${APP_BUNDLE}"
