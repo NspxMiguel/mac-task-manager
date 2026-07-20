@@ -25,23 +25,20 @@ brew tap spxmiguel/tap
 brew install --cask task-manager
 ```
 
+Isso **compila o app na sua própria máquina** em vez de baixar um binário pronto:
+
+- Detecta se você tem as Command Line Tools do Xcode (gratuitas, não precisa de licença/conta paga)
+- Se não tiver, já dispara a instalação e espera terminar sozinho
+- Assim que estão prontas, compila e instala o app em `/Applications` — sem passo manual
+
+Build local também significa **sem aviso de Gatekeeper** ("desenvolvedor não identificado"), já que esse aviso só aparece em binários baixados prontos de fora.
+
 > Primeira vez usando esta tap? O Homebrew pode pedir para confiar nela antes de instalar:
 > ```bash
 > brew trust --cask spxmiguel/tap/task-manager
 > ```
 
 Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `⌘⎋` já funciona de cara.
-
-<details>
-<summary><strong>Prefere instalar manualmente?</strong></summary>
-
-<br>
-
-1. Baixe o `.zip` mais recente em [Releases](https://github.com/spxmiguel/mac-task-manager/releases)
-2. Descompacte e arraste `TaskManager.app` para `/Applications`
-3. Abra normalmente (clique com o botão direito → Abrir, na primeira vez, se o Gatekeeper reclamar)
-
-</details>
 
 ---
 
