@@ -1,0 +1,73 @@
+{
+  "": {
+    "dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/TaskManager.d",
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/TaskManager.o",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/primary.swiftdeps"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/AppDelegate.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/AppDelegate.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/AppDelegate~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/AppDelegate.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/AppDelegate.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/HotKeyManager.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/HotKeyManager.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/HotKeyManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/HotKeyManager.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/HotKeyManager.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/ProcessMonitor.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ProcessMonitor.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ProcessMonitor~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ProcessMonitor.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ProcessMonitor.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/SettingsStore.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SettingsStore.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SettingsStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SettingsStore.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SettingsStore.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/SystemStats.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SystemStats.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SystemStats~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SystemStats.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SystemStats.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/Views/ContentView.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ContentView.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ContentView~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ContentView.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ContentView.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/Views/PerformanceView.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/PerformanceView.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/PerformanceView~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/PerformanceView.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/PerformanceView.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/Views/ProcessListView.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ProcessListView.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ProcessListView~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ProcessListView.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ProcessListView.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/Views/SettingsView.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SettingsView.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SettingsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SettingsView.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/SettingsView.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/Views/ShortcutRecorderView.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ShortcutRecorderView.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ShortcutRecorderView~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ShortcutRecorderView.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/ShortcutRecorderView.dia"
+  },
+  "/Users/miguelramthunmoretti/Documents/mac-task-manager/Sources/TaskManager/main.swift": {
+    "object": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/main.swift.o",
+    "swiftmodule": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/main.swiftdeps",
+    "diagnostics": "/Users/miguelramthunmoretti/Documents/mac-task-manager/.build/arm64-apple-macosx/release/TaskManager.build/main.dia"
+  }
+}
