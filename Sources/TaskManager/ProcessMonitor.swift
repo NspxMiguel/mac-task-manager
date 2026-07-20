@@ -16,6 +16,12 @@ struct ProcessInfoEntry: Identifiable, Equatable {
 /// mechanism Activity Monitor's command-line sibling `top`/`ps` use and
 /// avoids needing elevated entitlements to read other processes' basic info.
 final class ProcessMonitor {
+    // `ps` reports %CPU relative to a single core, so a busy process on a
+    // multi-core Mac can read e.g. 165%. Windows' Task Manager normalizes
+    // per-process CPU to the whole machine's capacity, so we do the same by
+    // dividing by the core count — keeps every value within 0...100%.
+    private let coreCount = Double(ProcessInfo.processInfo.activeProcessorCount)
+
     func snapshot() -> [ProcessInfoEntry] {
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/ps")
@@ -49,11 +55,13 @@ final class ProcessMonitor {
             let comm = String(fields[6])
             let name = (comm as NSString).lastPathComponent
 
+            let normalizedCPU = min(max(cpu / coreCount, 0), 100)
+
             results.append(ProcessInfoEntry(
                 pid: pid,
                 ppid: ppid,
                 name: name,
-                cpuPercent: cpu,
+                cpuPercent: normalizedCPU,
                 memoryPercent: mem,
                 memoryMB: rssKB / 1024.0,
                 user: user
