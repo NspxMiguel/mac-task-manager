@@ -5,6 +5,7 @@ import Combine
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow!
     private var statusItem: NSStatusItem!
+    private var statusMenu: NSMenu!
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupWindow()
@@ -31,16 +32,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "gauge.with.dots.needle.67percent", accessibilityDescription: "Gerenciador de Tarefas")
-            button.action = #selector(toggleWindow)
+            button.action = #selector(statusItemClicked(_:))
             button.target = self
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
 
-        let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Mostrar/Ocultar", action: #selector(toggleWindow), keyEquivalent: ""))
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Sair", action: #selector(quit), keyEquivalent: "q"))
-        statusItem.menu = nil // left-click toggles; right-click could show menu if desired
-        statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
+        statusMenu = NSMenu()
+        statusMenu.addItem(NSMenuItem(title: "Mostrar/Ocultar", action: #selector(toggleWindow), keyEquivalent: ""))
+        statusMenu.addItem(NSMenuItem.separator())
+        statusMenu.addItem(NSMenuItem(title: "Sair", action: #selector(quit), keyEquivalent: "q"))
+        statusMenu.items.forEach { $0.target = self }
+    }
+
+    @objc private func statusItemClicked(_ sender: Any?) {
+        guard let event = NSApp.currentEvent, event.type == .rightMouseUp else {
+            toggleWindow()
+            return
+        }
+        // Temporarily attach the menu just for this right-click, so a
+        // left-click keeps toggling the window instead of always opening it.
+        statusItem.menu = statusMenu
+        statusItem.button?.performClick(nil)
+        statusItem.menu = nil
     }
 
     private func setupHotKey() {
