@@ -21,8 +21,8 @@ Lista de processos ao vivo, gráficos de CPU/memória/disco e um atalho global c
 A forma mais fácil, via [Homebrew](https://brew.sh):
 
 ```bash
-brew tap spxmiguel/tap
-brew install --cask task-manager
+brew tap spxmiguel/tap        # adiciona meu repositório pessoal de pacotes ao Homebrew
+brew install --cask task-manager  # baixa o código-fonte e compila o app na sua máquina
 ```
 
 Isso **compila o app na sua própria máquina** em vez de baixar um binário pronto:
@@ -33,7 +33,7 @@ Isso **compila o app na sua própria máquina** em vez de baixar um binário pro
 
 Build local também significa **sem aviso de Gatekeeper** ("desenvolvedor não identificado"), já que esse aviso só aparece em binários baixados prontos de fora.
 
-> Primeira vez usando esta tap? O Homebrew pode pedir para confiar nela antes de instalar:
+> Primeira vez usando esta tap? O Homebrew pode pedir para confiar nela antes de instalar (é uma trava de segurança para taps de terceiros — como esta é minha, é seguro confiar):
 > ```bash
 > brew trust --cask spxmiguel/tap/task-manager
 > ```
@@ -49,7 +49,7 @@ Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `�
 | **Processos** | Lista ao vivo (atualiza a cada 2s), ordenável por nome / PID / CPU / memória, busca por nome ou PID, `Finalizar tarefa` com confirmação, `Forçar encerramento` no menu de contexto. Uso de CPU acima de 50% aparece em vermelho. |
 | **Desempenho** | CPU com gráfico em tempo real, memória e disco — lidos direto via APIs nativas do sistema (Mach/Darwin), sem shell out. |
 | **Ajustes** | Atalho global gravável na hora (clique e pressione a combinação desejada), padrão `⌘⎋`. Opção de abrir automaticamente no login. |
-| **Barra de menu** | Ícone fixo para abrir/fechar sem precisar do atalho. |
+| **Barra de menu** | Ícone fixo: clique para abrir/fechar a janela, clique com o botão direito para `Mostrar/Ocultar` ou `Sair` do app. |
 
 ---
 
@@ -65,15 +65,15 @@ Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `�
 Precisa do Xcode Command Line Tools (`xcode-select --install`).
 
 ```bash
-git clone https://github.com/spxmiguel/mac-task-manager.git
-cd mac-task-manager
-./build_app.sh
-open TaskManager.app
+git clone https://github.com/spxmiguel/mac-task-manager.git  # baixa o código-fonte
+cd mac-task-manager                                           # entra na pasta do projeto
+./build_app.sh                                                # compila e empacota em TaskManager.app (assinado localmente)
+open TaskManager.app                                          # abre o app recém-compilado
 ```
 
-O script compila em modo release, empacota em `TaskManager.app` e assina localmente (ad-hoc) para o Gatekeeper não bloquear.
+O script `build_app.sh` compila em modo release, empacota em `TaskManager.app` e assina localmente (ad-hoc) para o Gatekeeper não bloquear.
 
-Para iterar rápido sem empacotar:
+Para iterar rápido sem empacotar (compila e já roda direto, sem gerar o `.app`):
 
 ```bash
 swift run
