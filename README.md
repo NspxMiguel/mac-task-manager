@@ -1,37 +1,105 @@
-# Gerenciador de Tarefas (mac)
+<div align="center">
 
-App nativo em Swift (SwiftUI + AppKit) parecido com o Gerenciador de Tarefas do Windows 11.
+# Gerenciador de Tarefas
 
-## Funcionalidades
+**O Task Manager do Windows 11, nativo pro macOS.**
 
-- Aba **Processos**: lista ao vivo (atualiza a cada 2s), ordenável por nome/PID/CPU/memória, busca, "Finalizar tarefa" (com confirmação) e "Forçar encerramento" no menu de contexto.
-- Aba **Desempenho**: CPU (com gráfico), memória e disco em tempo real, lidos direto via APIs do sistema (sem shell out).
-- Aba **Ajustes**: atalho global configurável (padrão `⌘⎋` — Cmd+Esc) e opção de abrir automaticamente no login.
-- Ícone na barra de menu para abrir/fechar também por lá.
+Lista de processos ao vivo, gráficos de CPU/memória/disco e um atalho global configurável — padrão `⌘⎋` (Cmd+Esc) — pra abrir de qualquer lugar, igual `Ctrl+Shift+Esc` no Windows.
 
-## Rodar
+[![Release](https://img.shields.io/github/v/release/spxmiguel/mac-task-manager?label=release&color=0a84ff)](https://github.com/spxmiguel/mac-task-manager/releases)
+[![Platform](https://img.shields.io/badge/platform-macOS%2013%2B-black?logo=apple)](#requisitos)
+[![Swift](https://img.shields.io/badge/Swift-SwiftUI%20%2B%20AppKit-orange?logo=swift)](#estrutura)
+[![Homebrew](https://img.shields.io/badge/homebrew-cask-fbb040?logo=homebrew)](#instalação)
+[![License](https://img.shields.io/github/license/spxmiguel/mac-task-manager?color=lightgrey)](LICENSE)
 
-Precisa do Xcode Command Line Tools instalado (`xcode-select --install`).
+</div>
+
+---
+
+## Instalação
+
+A forma mais fácil, via [Homebrew](https://brew.sh):
 
 ```bash
+brew tap spxmiguel/tap
+brew install --cask task-manager
+```
+
+> Primeira vez usando esta tap? O Homebrew pode pedir para confiar nela antes de instalar:
+> ```bash
+> brew trust --cask spxmiguel/tap/task-manager
+> ```
+
+Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `⌘⎋` já funciona de cara.
+
+<details>
+<summary><strong>Prefere instalar manualmente?</strong></summary>
+
+<br>
+
+1. Baixe o `.zip` mais recente em [Releases](https://github.com/spxmiguel/mac-task-manager/releases)
+2. Descompacte e arraste `TaskManager.app` para `/Applications`
+3. Abra normalmente (clique com o botão direito → Abrir, na primeira vez, se o Gatekeeper reclamar)
+
+</details>
+
+---
+
+## O que tem
+
+| | |
+|---|---|
+| **Processos** | Lista ao vivo (atualiza a cada 2s), ordenável por nome / PID / CPU / memória, busca por nome ou PID, `Finalizar tarefa` com confirmação, `Forçar encerramento` no menu de contexto. Uso de CPU acima de 50% aparece em vermelho. |
+| **Desempenho** | CPU com gráfico em tempo real, memória e disco — lidos direto via APIs nativas do sistema (Mach/Darwin), sem shell out. |
+| **Ajustes** | Atalho global gravável na hora (clique e pressione a combinação desejada), padrão `⌘⎋`. Opção de abrir automaticamente no login. |
+| **Barra de menu** | Ícone fixo para abrir/fechar sem precisar do atalho. |
+
+---
+
+## Requisitos
+
+- macOS 13 (Ventura) ou mais recente
+- Apple Silicon ou Intel
+
+---
+
+## Build a partir do código-fonte
+
+Precisa do Xcode Command Line Tools (`xcode-select --install`).
+
+```bash
+git clone https://github.com/spxmiguel/mac-task-manager.git
+cd mac-task-manager
 ./build_app.sh
 open TaskManager.app
 ```
 
-Isso compila em modo release, empacota em `TaskManager.app` e assina localmente (ad-hoc), para o macOS não bloquear.
+O script compila em modo release, empacota em `TaskManager.app` e assina localmente (ad-hoc) para o Gatekeeper não bloquear.
 
-Para desenvolvimento rápido sem empacotar:
+Para iterar rápido sem empacotar:
 
 ```bash
 swift run
 ```
 
-(nesse modo o app roda, mas sem ícone customizado / metadados de bundle).
+---
 
 ## Estrutura
 
-- `Sources/TaskManager/AppDelegate.swift` — janela principal, ícone da barra de menu, liga o atalho global.
-- `Sources/TaskManager/HotKeyManager.swift` — registro do atalho global via Carbon Event Manager (não precisa de permissão de Acessibilidade).
-- `Sources/TaskManager/ProcessMonitor.swift` — snapshot de processos via `ps`.
-- `Sources/TaskManager/SystemStats.swift` — CPU/memória/disco via Mach/Darwin.
-- `Sources/TaskManager/Views/` — telas SwiftUI.
+```
+Sources/TaskManager/
+├── AppDelegate.swift        # janela principal, ícone da barra de menu, liga o atalho global
+├── HotKeyManager.swift      # atalho global via Carbon Event Manager (não pede permissão de Acessibilidade)
+├── ProcessMonitor.swift     # snapshot de processos via `ps`
+├── SystemStats.swift        # CPU / memória / disco via Mach/Darwin
+├── SettingsStore.swift      # persistência do atalho escolhido
+└── Views/                   # telas SwiftUI (Processos, Desempenho, Ajustes)
+```
+
+---
+
+<div align="center">
+
+Feito por [@spxmiguel](https://github.com/spxmiguel)
+
+</div>
