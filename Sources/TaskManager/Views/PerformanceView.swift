@@ -32,6 +32,7 @@ final class PerformanceModel: ObservableObject {
 }
 
 struct PerformanceView: View {
+    @ObservedObject private var settings = SettingsStore.shared
     @StateObject private var model = PerformanceModel()
 
     var body: some View {
@@ -47,7 +48,7 @@ struct PerformanceView: View {
                 }
 
                 MetricCard(
-                    title: "Memória",
+                    title: tr(en: "Memory", pt: "Memória"),
                     valueText: String(format: "%.1f GB / %.1f GB", model.snapshot.memoryUsedGB, model.snapshot.memoryTotalGB),
                     fraction: model.snapshot.memoryUsedFraction
                 ) {
@@ -56,7 +57,7 @@ struct PerformanceView: View {
                 }
 
                 MetricCard(
-                    title: "Disco (/)",
+                    title: tr(en: "Disk (/)", pt: "Disco (/)"),
                     valueText: String(format: "%.0f GB / %.0f GB", model.snapshot.diskUsedGB, model.snapshot.diskTotalGB),
                     fraction: model.snapshot.diskUsedFraction
                 ) {

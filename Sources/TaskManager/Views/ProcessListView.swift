@@ -1,11 +1,17 @@
 import SwiftUI
 import AppKit
 
-enum SortField: String, CaseIterable {
-    case name = "Nome"
-    case pid = "PID"
-    case cpu = "CPU"
-    case memory = "Memória"
+enum SortField: CaseIterable {
+    case name, pid, cpu, memory
+
+    var label: String {
+        switch self {
+        case .name: return tr(en: "Name", pt: "Nome")
+        case .pid: return "PID"
+        case .cpu: return "CPU"
+        case .memory: return tr(en: "Memory", pt: "Memória")
+        }
+    }
 }
 
 final class ProcessListModel: ObservableObject {
@@ -65,6 +71,7 @@ final class ProcessListModel: ObservableObject {
 }
 
 struct ProcessListView: View {
+    @ObservedObject private var settings = SettingsStore.shared
     @StateObject private var model = ProcessListModel()
     @State private var keyMonitor: Any?
 
@@ -75,7 +82,7 @@ struct ProcessListView: View {
                     Image(systemName: "magnifyingglass")
                         .foregroundStyle(.secondary)
                         .font(.system(size: 12))
-                    TextField("Buscar processo ou PID", text: $model.searchText)
+                    TextField(tr(en: "Search process or PID", pt: "Buscar processo ou PID"), text: $model.searchText)
                         .textFieldStyle(.plain)
                         .font(.system(size: 12))
                 }
@@ -89,20 +96,23 @@ struct ProcessListView: View {
                     model.refresh()
                 } label: {
                     Image(systemName: "arrow.clockwise")
+                        .frame(width: 28, height: 28)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
-                .help("Atualizar agora")
+                .help(tr(en: "Refresh now", pt: "Atualizar agora"))
 
                 Button {
                     if let pid = model.selectedPID {
                         model.endTask(pid: pid)
                     }
                 } label: {
-                    Label("Finalizar tarefa", systemImage: "xmark.octagon.fill")
+                    Label(tr(en: "End Task", pt: "Finalizar tarefa"), systemImage: "xmark.octagon.fill")
                         .font(.system(size: 12, weight: .medium))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(model.selectedPID == nil ? Color.secondary : Color.white)
@@ -132,7 +142,7 @@ struct ProcessListView: View {
                                 model.selectedPID = proc.pid
                             }
                             .contextMenu {
-                                Button("Finalizar tarefa") {
+                                Button(tr(en: "End Task", pt: "Finalizar tarefa")) {
                                     model.endTask(pid: proc.pid)
                                 }
                             }
@@ -162,10 +172,10 @@ struct ProcessListView: View {
 
     private var header: some View {
         HStack(spacing: 0) {
-            headerButton("Nome", field: .name, width: nil, alignment: .leading)
-            headerButton("PID", field: .pid, width: 70, alignment: .trailing)
-            headerButton("CPU", field: .cpu, width: 80, alignment: .trailing)
-            headerButton("Memória", field: .memory, width: 100, alignment: .trailing)
+            headerButton(.name, width: nil, alignment: .leading)
+            headerButton(.pid, width: 70, alignment: .trailing)
+            headerButton(.cpu, width: 80, alignment: .trailing)
+            headerButton(.memory, width: 100, alignment: .trailing)
         }
         .font(.caption.bold())
         .foregroundStyle(.secondary)
@@ -173,7 +183,7 @@ struct ProcessListView: View {
         .padding(.vertical, 6)
     }
 
-    private func headerButton(_ title: String, field: SortField, width: CGFloat?, alignment: Alignment) -> some View {
+    private func headerButton(_ field: SortField, width: CGFloat?, alignment: Alignment) -> some View {
         Button {
             if model.sortField == field {
                 model.sortAscending.toggle()
@@ -183,13 +193,14 @@ struct ProcessListView: View {
             }
         } label: {
             HStack(spacing: 2) {
-                Text(title)
+                Text(field.label)
                 if model.sortField == field {
                     Image(systemName: model.sortAscending ? "chevron.up" : "chevron.down")
                         .font(.system(size: 9))
                 }
             }
             .frame(maxWidth: width ?? .infinity, alignment: alignment)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }

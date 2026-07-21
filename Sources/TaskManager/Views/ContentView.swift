@@ -1,11 +1,11 @@
 import SwiftUI
 
-enum SidebarSection: String, CaseIterable, Identifiable {
-    case processes = "Processos"
-    case performance = "Desempenho"
-    case settings = "Ajustes"
+enum SidebarSection: CaseIterable, Identifiable, Hashable {
+    case processes
+    case performance
+    case settings
 
-    var id: String { rawValue }
+    var id: Self { self }
 
     var icon: String {
         switch self {
@@ -14,9 +14,18 @@ enum SidebarSection: String, CaseIterable, Identifiable {
         case .settings: return "gearshape"
         }
     }
+
+    var label: String {
+        switch self {
+        case .processes: return tr(en: "Processes", pt: "Processos")
+        case .performance: return tr(en: "Performance", pt: "Desempenho")
+        case .settings: return tr(en: "Settings", pt: "Ajustes")
+        }
+    }
 }
 
 struct ContentView: View {
+    @ObservedObject private var settings = SettingsStore.shared
     @State private var selection: SidebarSection = .processes
 
     var body: some View {
@@ -60,13 +69,14 @@ struct ContentView: View {
             VStack(spacing: 4) {
                 Image(systemName: section.icon)
                     .font(.system(size: 16, weight: isSelected ? .semibold : .regular))
-                Text(section.rawValue)
+                Text(section.label)
                     .font(.system(size: 9))
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
             .foregroundStyle(isSelected ? .white : .secondary)
             .frame(width: 52, height: 48)
+            .contentShape(Rectangle())
             .background(
                 RoundedRectangle(cornerRadius: 8)
                     .fill(isSelected ? Theme.accent.opacity(0.85) : .clear)
