@@ -38,8 +38,9 @@ Segue o tema claro/escuro do sistema automaticamente (Ajustes > Geral > Aparênc
 A forma mais fácil, via [Homebrew](https://brew.sh):
 
 ```bash
-brew tap spxmiguel/tap        # adiciona meu repositório pessoal de pacotes ao Homebrew
-brew install --cask task-manager  # baixa o código-fonte e compila o app na sua máquina
+brew tap spxmiguel/tap                              # adiciona meu repositório pessoal de pacotes ao Homebrew
+brew trust --cask spxmiguel/tap/task-manager        # confia na tap (trava de segurança para taps de terceiros — como esta é minha, é seguro confiar)
+brew install --cask task-manager                    # baixa o código-fonte e compila o app na sua máquina
 ```
 
 Isso **compila o app na sua própria máquina** em vez de baixar um binário pronto:
@@ -49,11 +50,6 @@ Isso **compila o app na sua própria máquina** em vez de baixar um binário pro
 - Assim que estão prontas, compila e instala o app em `/Applications` — sem passo manual
 
 Build local também significa **sem aviso de Gatekeeper** ("desenvolvedor não identificado"), já que esse aviso só aparece em binários baixados prontos de fora.
-
-> Primeira vez usando esta tap? O Homebrew pode pedir para confiar nela antes de instalar (é uma trava de segurança para taps de terceiros — como esta é minha, é seguro confiar):
-> ```bash
-> brew trust --cask spxmiguel/tap/task-manager
-> ```
 
 Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `⌘⇧⎋` já funciona de cara.
 
