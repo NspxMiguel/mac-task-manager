@@ -19,7 +19,7 @@ final class ProcessListModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var sortField: SortField = .cpu
     @Published var sortAscending: Bool = false
-    @Published var selectedPID: Int32?
+    @Published var selectedPIDs: Set<Int32> = []
 
     private let monitor = ProcessMonitor()
     private var timer: Timer?
@@ -61,8 +61,23 @@ final class ProcessListModel: ObservableObject {
         return list
     }
 
+    func selectAll() {
+        selectedPIDs = Set(filteredSorted.map(\.pid))
+    }
+
     func endTask(pid: Int32) {
-        _ = monitor.kill(pid: pid)
+        endTasks([pid])
+    }
+
+    func endSelectedTasks() {
+        endTasks(selectedPIDs)
+    }
+
+    private func endTasks(_ pids: some Sequence<Int32>) {
+        for pid in pids {
+            _ = monitor.kill(pid: pid)
+        }
+        selectedPIDs.removeAll()
         // Give the OS a moment, then refresh.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.refresh()
@@ -104,23 +119,21 @@ struct ProcessListView: View {
                 .help(tr(en: "Refresh now", pt: "Atualizar agora"))
 
                 Button {
-                    if let pid = model.selectedPID {
-                        model.endTask(pid: pid)
-                    }
+                    model.endSelectedTasks()
                 } label: {
-                    Label(tr(en: "End Task", pt: "Finalizar tarefa"), systemImage: "xmark.octagon.fill")
+                    Label(endTaskLabel, systemImage: "xmark.octagon.fill")
                         .font(.system(size: 12, weight: .medium))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(model.selectedPID == nil ? Color.secondary : Color.white)
+                .foregroundStyle(model.selectedPIDs.isEmpty ? Color.secondary : Color.white)
                 .background(
                     RoundedRectangle(cornerRadius: 7)
-                        .fill(model.selectedPID == nil ? Theme.controlBackground : Color.red.opacity(0.85))
+                        .fill(model.selectedPIDs.isEmpty ? Theme.controlBackground : Color.red.opacity(0.85))
                 )
-                .disabled(model.selectedPID == nil)
+                .disabled(model.selectedPIDs.isEmpty)
             }
             .padding(12)
 
@@ -135,11 +148,11 @@ struct ProcessListView: View {
                     ForEach(model.filteredSorted) { proc in
                         ProcessRow(process: proc)
                             .background(
-                                model.selectedPID == proc.pid ? Theme.accent.opacity(0.35) : Color.clear
+                                model.selectedPIDs.contains(proc.pid) ? Theme.accent.opacity(0.35) : Color.clear
                             )
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                model.selectedPID = proc.pid
+                                model.selectedPIDs = [proc.pid]
                             }
                             .contextMenu {
                                 Button(tr(en: "End Task", pt: "Finalizar tarefa")) {
@@ -155,9 +168,15 @@ struct ProcessListView: View {
         .onAppear {
             model.start()
             keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-                // Delete (forward-delete) or Backspace, like Windows' Task Manager.
-                if event.keyCode == 51 || event.keyCode == 117, let pid = model.selectedPID {
-                    model.endTask(pid: pid)
+                // Cmd+A or Ctrl+A selects every process, like Windows' Task Manager.
+                if event.charactersIgnoringModifiers == "a",
+                   event.modifierFlags.contains(.command) || event.modifierFlags.contains(.control) {
+                    model.selectAll()
+                    return nil
+                }
+                // Delete (forward-delete) or Backspace ends the selected task(s).
+                if event.keyCode == 51 || event.keyCode == 117, !model.selectedPIDs.isEmpty {
+                    model.endSelectedTasks()
                     return nil
                 }
                 return event
@@ -168,6 +187,14 @@ struct ProcessListView: View {
             if let keyMonitor { NSEvent.removeMonitor(keyMonitor) }
             keyMonitor = nil
         }
+    }
+
+    private var endTaskLabel: String {
+        let count = model.selectedPIDs.count
+        if count > 1 {
+            return tr(en: "End \(count) Tasks", pt: "Finalizar \(count) tarefas")
+        }
+        return tr(en: "End Task", pt: "Finalizar tarefa")
     }
 
     private var header: some View {
