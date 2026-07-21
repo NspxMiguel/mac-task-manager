@@ -20,7 +20,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window = NSWindow(contentViewController: hosting)
         window.title = "Gerenciador de Tarefas"
         window.styleMask = [.titled, .closable, .miniaturizable, .resizable]
-        window.appearance = NSAppearance(named: .darkAqua)
         window.setContentSize(NSSize(width: 780, height: 580))
         window.center()
         window.isReleasedWhenClosed = false

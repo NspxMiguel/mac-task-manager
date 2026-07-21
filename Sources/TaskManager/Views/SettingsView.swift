@@ -19,7 +19,7 @@ struct SettingsView: View {
                             .frame(minWidth: 90)
                             .padding(.vertical, 4)
                             .padding(.horizontal, 8)
-                            .background(RoundedRectangle(cornerRadius: 6).fill(isRecording ? Color.accentColor.opacity(0.2) : Color.gray.opacity(0.15)))
+                            .background(RoundedRectangle(cornerRadius: 6).fill(isRecording ? Color.accentColor.opacity(0.2) : Theme.controlBackground))
                     }
                     .buttonStyle(.plain)
                     .background(

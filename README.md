@@ -16,6 +16,23 @@ Lista de processos ao vivo, gráficos de CPU/memória/disco e um atalho global c
 
 ---
 
+## Screenshots
+
+Segue o tema claro/escuro do sistema automaticamente (Ajustes > Geral > Aparência no macOS):
+
+<table>
+<tr>
+<td><img src="assets/screenshot-dark.png" alt="Modo escuro"></td>
+<td><img src="assets/screenshot-light.png" alt="Modo claro"></td>
+</tr>
+<tr>
+<td align="center">Modo escuro</td>
+<td align="center">Modo claro</td>
+</tr>
+</table>
+
+---
+
 ## Instalação
 
 A forma mais fácil, via [Homebrew](https://brew.sh):
@@ -50,6 +67,9 @@ Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `�
 | **Desempenho** | CPU com gráfico em tempo real, memória e disco — lidos direto via APIs nativas do sistema (Mach/Darwin), sem shell out. |
 | **Ajustes** | Atalho global gravável na hora (clique e pressione a combinação desejada), padrão `⌘⇧⎋`. Opção de abrir automaticamente no login. |
 | **Barra de menu** | Ícone fixo: clique para abrir/fechar a janela, clique com o botão direito para `Mostrar/Ocultar` ou `Sair` do app. |
+| **Aparência** | Claro/escuro automático, puxado do sistema. |
+
+Focado no essencial (Processos, Desempenho, Ajustes) — não cobre abas do Windows como Histórico de app, Inicializar, Usuários ou Serviços.
 
 ---
 

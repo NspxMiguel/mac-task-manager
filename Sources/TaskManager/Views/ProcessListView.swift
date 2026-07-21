@@ -81,7 +81,7 @@ struct ProcessListView: View {
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
-                .background(RoundedRectangle(cornerRadius: 7).fill(Color.white.opacity(0.06)))
+                .background(RoundedRectangle(cornerRadius: 7).fill(Theme.controlBackground))
 
                 Spacer()
 
@@ -109,7 +109,7 @@ struct ProcessListView: View {
                 .foregroundStyle(model.selectedPID == nil ? Color.secondary : Color.white)
                 .background(
                     RoundedRectangle(cornerRadius: 7)
-                        .fill(model.selectedPID == nil ? Color.white.opacity(0.06) : Color.red.opacity(0.85))
+                        .fill(model.selectedPID == nil ? Theme.controlBackground : Color.red.opacity(0.85))
                 )
                 .disabled(model.selectedPID == nil)
             }
@@ -121,25 +121,30 @@ struct ProcessListView: View {
 
             Divider().overlay(Theme.separator)
 
-            List(model.filteredSorted, selection: $model.selectedPID) { proc in
-                ProcessRow(process: proc)
-                    .listRowBackground(
-                        model.selectedPID == proc.pid ? Theme.accent.opacity(0.35) : Color.clear
-                    )
-                    .listRowSeparatorTint(Theme.separator)
-                    .tag(proc.pid)
-                    .contextMenu {
-                        Button("Finalizar tarefa") {
-                            pendingKillPID = proc.pid
-                            showKillConfirm = true
-                        }
-                        Button("Forçar encerramento") {
-                            model.endTask(pid: proc.pid, force: true)
-                        }
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(model.filteredSorted) { proc in
+                        ProcessRow(process: proc)
+                            .background(
+                                model.selectedPID == proc.pid ? Theme.accent.opacity(0.35) : Color.clear
+                            )
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                model.selectedPID = proc.pid
+                            }
+                            .contextMenu {
+                                Button("Finalizar tarefa") {
+                                    pendingKillPID = proc.pid
+                                    showKillConfirm = true
+                                }
+                                Button("Forçar encerramento") {
+                                    model.endTask(pid: proc.pid, force: true)
+                                }
+                            }
+                        Divider().overlay(Theme.separator)
                     }
+                }
             }
-            .listStyle(.plain)
-            .scrollContentBackground(.hidden)
         }
         .background(Theme.contentBackground)
         .onAppear { model.start() }
@@ -221,7 +226,8 @@ struct ProcessRow: View {
                 .foregroundStyle(.secondary)
         }
         .font(.system(size: 12, design: .monospaced))
-        .padding(.vertical, 4)
+        .padding(.horizontal, 22)
+        .padding(.vertical, 6)
     }
 
     private func heatCell(_ text: String, fraction: Double, width: CGFloat) -> some View {
