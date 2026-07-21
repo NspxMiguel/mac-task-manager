@@ -40,11 +40,7 @@ struct ContentView: View {
 
     private var sidebar: some View {
         VStack(spacing: 4) {
-            Image(systemName: "gauge.with.dots.needle.67percent")
-                .font(.system(size: 20))
-                .foregroundStyle(Theme.accent)
-                .padding(.top, 16)
-                .padding(.bottom, 12)
+            Spacer().frame(height: 16)
 
             ForEach(SidebarSection.allCases) { section in
                 sidebarButton(section)

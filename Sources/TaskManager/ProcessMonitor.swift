@@ -70,20 +70,10 @@ final class ProcessMonitor {
         return results
     }
 
-    enum KillSignal {
-        case terminate // SIGTERM
-        case force     // SIGKILL
-
-        var raw: Int32 {
-            switch self {
-            case .terminate: return SIGTERM
-            case .force: return SIGKILL
-            }
-        }
-    }
-
+    /// Sends SIGKILL. A polite SIGTERM is easy for a process to ignore, and
+    /// "Finalizar tarefa" needs to actually end it.
     @discardableResult
-    func kill(pid: Int32, signal: KillSignal = .force) -> Bool {
-        Darwin.kill(pid, signal.raw) == 0
+    func kill(pid: Int32) -> Bool {
+        Darwin.kill(pid, SIGKILL) == 0
     }
 }

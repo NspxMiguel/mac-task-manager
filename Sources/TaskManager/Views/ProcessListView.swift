@@ -54,8 +54,8 @@ final class ProcessListModel: ObservableObject {
         return list
     }
 
-    func endTask(pid: Int32, force: Bool) {
-        _ = monitor.kill(pid: pid, signal: force ? .force : .terminate)
+    func endTask(pid: Int32) {
+        _ = monitor.kill(pid: pid)
         // Give the OS a moment, then refresh.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.refresh()
@@ -137,9 +137,6 @@ struct ProcessListView: View {
                                     pendingKillPID = proc.pid
                                     showKillConfirm = true
                                 }
-                                Button("Forçar encerramento") {
-                                    model.endTask(pid: proc.pid, force: true)
-                                }
                             }
                         Divider().overlay(Theme.separator)
                     }
@@ -152,7 +149,7 @@ struct ProcessListView: View {
         .alert("Finalizar esta tarefa?", isPresented: $showKillConfirm, presenting: pendingKillPID) { pid in
             Button("Cancelar", role: .cancel) {}
             Button("Finalizar tarefa", role: .destructive) {
-                model.endTask(pid: pid, force: false)
+                model.endTask(pid: pid)
             }
         } message: { pid in
             if let proc = model.processes.first(where: { $0.pid == pid }) {
