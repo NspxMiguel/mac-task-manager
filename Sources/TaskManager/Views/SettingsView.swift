@@ -53,6 +53,18 @@ struct SettingsView: View {
             }
 
             Section {
+                Toggle(tr(en: "Show icon in Dock", pt: "Mostrar ícone no Dock"), isOn: $settings.showInDock)
+                Text(tr(
+                    en: "When off, the app stays available only in the menu bar and via the global shortcut.",
+                    pt: "Quando desativado, o app fica disponível apenas na barra de menu e pelo atalho global."
+                ))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text(tr(en: "Dock", pt: "Dock"))
+            }
+
+            Section {
                 Picker(tr(en: "Language", pt: "Idioma"), selection: $settings.language) {
                     ForEach(AppLanguage.allCases) { lang in
                         Text(lang.displayName).tag(lang)

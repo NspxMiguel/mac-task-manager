@@ -32,6 +32,7 @@ final class SettingsStore: ObservableObject {
     private let comboKey = "hotkey.combo"
     private let languageKey = "app.language"
     private let themeKey = "app.theme"
+    private let showInDockKey = "app.showInDock"
 
     @Published var hotKeyCombo: KeyCombo {
         didSet { save(combo: hotKeyCombo) }
@@ -43,6 +44,10 @@ final class SettingsStore: ObservableObject {
 
     @Published var themeMode: ThemeMode {
         didSet { defaults.set(themeMode.rawValue, forKey: themeKey) }
+    }
+
+    @Published var showInDock: Bool {
+        didSet { defaults.set(showInDock, forKey: showInDockKey) }
     }
 
     private init() {
@@ -63,6 +68,12 @@ final class SettingsStore: ObservableObject {
             themeMode = mode
         } else {
             themeMode = .system
+        }
+
+        if defaults.object(forKey: showInDockKey) != nil {
+            showInDock = defaults.bool(forKey: showInDockKey)
+        } else {
+            showInDock = true
         }
     }
 

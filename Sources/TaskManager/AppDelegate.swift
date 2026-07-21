@@ -13,6 +13,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         setupWindow()
         setupStatusItem()
         setupHotKey()
+        applyDockVisibility(SettingsStore.shared.showInDock)
         setupSettingsObservers()
     }
 
@@ -91,11 +92,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self.showHideItem.title = tr(en: "Show/Hide", pt: "Mostrar/Ocultar")
                 self.quitItem.title = tr(en: "Quit", pt: "Sair")
             }
+
+        showInDockObserver = SettingsStore.shared.$showInDock
+            .dropFirst()
+            .sink { [weak self] showInDock in
+                self?.applyDockVisibility(showInDock)
+            }
+    }
+
+    private func applyDockVisibility(_ showInDock: Bool) {
+        NSApp.setActivationPolicy(showInDock ? .regular : .accessory)
+        if showInDock {
+            NSApp.activate(ignoringOtherApps: true)
+            window.makeKeyAndOrderFront(nil)
+        }
     }
 
     private var hotKeyObserver: AnyCancellable?
     private var themeObserver: AnyCancellable?
     private var languageObserver: AnyCancellable?
+    private var showInDockObserver: AnyCancellable?
 
     @objc private func toggleWindow() {
         if window.isVisible && NSApp.isActive {
