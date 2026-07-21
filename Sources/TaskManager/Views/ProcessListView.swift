@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 enum SortField: String, CaseIterable {
     case name = "Nome"
@@ -65,8 +66,7 @@ final class ProcessListModel: ObservableObject {
 
 struct ProcessListView: View {
     @StateObject private var model = ProcessListModel()
-    @State private var pendingKillPID: Int32?
-    @State private var showKillConfirm = false
+    @State private var keyMonitor: Any?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -96,8 +96,7 @@ struct ProcessListView: View {
 
                 Button {
                     if let pid = model.selectedPID {
-                        pendingKillPID = pid
-                        showKillConfirm = true
+                        model.endTask(pid: pid)
                     }
                 } label: {
                     Label("Finalizar tarefa", systemImage: "xmark.octagon.fill")
@@ -134,8 +133,7 @@ struct ProcessListView: View {
                             }
                             .contextMenu {
                                 Button("Finalizar tarefa") {
-                                    pendingKillPID = proc.pid
-                                    showKillConfirm = true
+                                    model.endTask(pid: proc.pid)
                                 }
                             }
                         Divider().overlay(Theme.separator)
@@ -144,19 +142,21 @@ struct ProcessListView: View {
             }
         }
         .background(Theme.contentBackground)
-        .onAppear { model.start() }
-        .onDisappear { model.stop() }
-        .alert("Finalizar esta tarefa?", isPresented: $showKillConfirm, presenting: pendingKillPID) { pid in
-            Button("Cancelar", role: .cancel) {}
-            Button("Finalizar tarefa", role: .destructive) {
-                model.endTask(pid: pid)
+        .onAppear {
+            model.start()
+            keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                // Delete (forward-delete) or Backspace, like Windows' Task Manager.
+                if event.keyCode == 51 || event.keyCode == 117, let pid = model.selectedPID {
+                    model.endTask(pid: pid)
+                    return nil
+                }
+                return event
             }
-        } message: { pid in
-            if let proc = model.processes.first(where: { $0.pid == pid }) {
-                Text("O processo \"\(proc.name)\" (PID \(pid)) será encerrado. Trabalho não salvo pode ser perdido.")
-            } else {
-                Text("PID \(pid) será encerrado.")
-            }
+        }
+        .onDisappear {
+            model.stop()
+            if let keyMonitor { NSEvent.removeMonitor(keyMonitor) }
+            keyMonitor = nil
         }
     }
 
