@@ -1,15 +1,15 @@
 <div align="center">
 
-# Gerenciador de Tarefas
+# Task Manager
 
-**O Task Manager do Windows 11, nativo pro macOS.**
+**Windows 11's Task Manager, native to macOS.**
 
-Lista de processos ao vivo, gráficos de CPU/memória/disco e um atalho global configurável — padrão `⌘⇧⎋` (Cmd+Shift+Esc) — pra abrir de qualquer lugar, igual `Ctrl+Shift+Esc` no Windows.
+Live process list, CPU/memory/disk graphs, and a configurable global shortcut — default `⌘⇧⎋` (Cmd+Shift+Esc) — to open it from anywhere, just like `Ctrl+Shift+Esc` on Windows.
 
 [![Release](https://img.shields.io/github/v/release/spxmiguel/mac-task-manager?label=release&color=0a84ff)](https://github.com/spxmiguel/mac-task-manager/releases)
-[![Platform](https://img.shields.io/badge/platform-macOS%2013%2B-black?logo=apple)](#requisitos)
-[![Swift](https://img.shields.io/badge/Swift-SwiftUI%20%2B%20AppKit-orange?logo=swift)](#estrutura)
-[![Homebrew](https://img.shields.io/badge/homebrew-cask-fbb040?logo=homebrew)](#instalação)
+[![Platform](https://img.shields.io/badge/platform-macOS%2013%2B-black?logo=apple)](#requirements)
+[![Swift](https://img.shields.io/badge/Swift-SwiftUI%20%2B%20AppKit-orange?logo=swift)](#structure)
+[![Homebrew](https://img.shields.io/badge/homebrew-cask-fbb040?logo=homebrew)](#installation)
 [![License](https://img.shields.io/github/license/spxmiguel/mac-task-manager?color=lightgrey)](LICENSE)
 
 </div>
@@ -18,78 +18,78 @@ Lista de processos ao vivo, gráficos de CPU/memória/disco e um atalho global c
 
 ## Screenshots
 
-Segue o tema claro/escuro do sistema automaticamente (Ajustes > Geral > Aparência no macOS):
+Follows the system's light/dark theme automatically (System Settings > General > Appearance on macOS):
 
 <table>
 <tr>
-<td><img src="assets/screenshot-dark.png" alt="Modo escuro"></td>
-<td><img src="assets/screenshot-light.png" alt="Modo claro"></td>
+<td><img src="assets/screenshot-dark.png" alt="Dark mode"></td>
+<td><img src="assets/screenshot-light.png" alt="Light mode"></td>
 </tr>
 <tr>
-<td align="center">Modo escuro</td>
-<td align="center">Modo claro</td>
+<td align="center">Dark mode</td>
+<td align="center">Light mode</td>
 </tr>
 </table>
 
 ---
 
-## Instalação
+## Installation
 
-A forma mais fácil, via [Homebrew](https://brew.sh):
+The easiest way, via [Homebrew](https://brew.sh):
 
 ```bash
-brew tap spxmiguel/tap                              # adiciona meu repositório pessoal de pacotes ao Homebrew
-brew trust --cask spxmiguel/tap/task-manager        # confia na tap (trava de segurança para taps de terceiros — como esta é minha, é seguro confiar)
-brew install --cask task-manager                    # baixa o código-fonte e compila o app na sua máquina
+brew tap spxmiguel/tap                              # adds my personal package repo to Homebrew
+brew trust --cask spxmiguel/tap/task-manager        # trusts the tap (a safety gate for third-party taps — since this one is mine, it's safe to trust)
+brew install --cask task-manager                    # downloads the source code and builds the app on your machine
 ```
 
-Isso **compila o app na sua própria máquina** em vez de baixar um binário pronto:
+This **builds the app on your own machine** instead of downloading a prebuilt binary:
 
-- Detecta se você tem as Command Line Tools do Xcode (gratuitas, não precisa de licença/conta paga)
-- Se não tiver, já dispara a instalação e espera terminar sozinho
-- Assim que estão prontas, compila e instala o app em `/Applications` — sem passo manual
+- Detects whether you have the Xcode Command Line Tools (free, no paid license/account needed)
+- If you don't, it kicks off the install and waits for it to finish on its own
+- Once ready, it builds and installs the app in `/Applications` — no manual step
 
-Build local também significa **sem aviso de Gatekeeper** ("desenvolvedor não identificado"), já que esse aviso só aparece em binários baixados prontos de fora.
+Building locally also means **no Gatekeeper warning** ("unidentified developer"), since that warning only shows up for prebuilt binaries downloaded from elsewhere.
 
-Abra pelo Spotlight ou direto em `/Applications/TaskManager.app`. Pronto — `⌘⇧⎋` já funciona de cara.
+Open it from Spotlight or directly at `/Applications/TaskManager.app`. Done — `⌘⇧⎋` already works out of the box.
 
 ---
 
-## O que tem
+## What's included
 
 | | |
 |---|---|
-| **Processos** | Lista ao vivo (atualiza a cada 2s), ordenável por nome / PID / CPU / memória, busca por nome ou PID, `Finalizar tarefa` com confirmação, `Forçar encerramento` no menu de contexto. Uso de CPU acima de 50% aparece em vermelho. |
-| **Desempenho** | CPU com gráfico em tempo real, memória e disco — lidos direto via APIs nativas do sistema (Mach/Darwin), sem shell out. |
-| **Ajustes** | Atalho global gravável na hora (clique e pressione a combinação desejada), padrão `⌘⇧⎋`. Opção de abrir automaticamente no login. |
-| **Barra de menu** | Ícone fixo: clique para abrir/fechar a janela, clique com o botão direito para `Mostrar/Ocultar` ou `Sair` do app. |
-| **Aparência** | Claro/escuro automático, puxado do sistema. |
+| **Processes** | Live list (refreshes every 2s), sortable by name / PID / CPU / memory, search by name or PID, `End task` with confirmation, `Force quit` in the context menu. CPU usage above 50% shows in red. |
+| **Performance** | CPU with a real-time graph, memory and disk — read directly via native system APIs (Mach/Darwin), no shell out. |
+| **Settings** | Global shortcut you can record live (click and press the desired combination), default `⌘⇧⎋`. Option to launch automatically at login. Toggle to show/hide the app icon in the Dock — when off, the app stays available only from the menu bar and the global shortcut. |
+| **Menu bar** | Persistent icon: click to open/close the window, right-click for `Show/Hide` or `Quit`. |
+| **Appearance** | Automatic light/dark, pulled from the system. |
 
-Focado no essencial (Processos, Desempenho, Ajustes) — não cobre abas do Windows como Histórico de app, Inicializar, Usuários ou Serviços.
-
----
-
-## Requisitos
-
-- macOS 13 (Ventura) ou mais recente
-- Apple Silicon ou Intel
+Focused on the essentials (Processes, Performance, Settings) — doesn't cover Windows tabs like App history, Startup, Users, or Services.
 
 ---
 
-## Build a partir do código-fonte
+## Requirements
 
-Precisa do Xcode Command Line Tools (`xcode-select --install`).
+- macOS 13 (Ventura) or later
+- Apple Silicon or Intel
+
+---
+
+## Build from source
+
+Requires the Xcode Command Line Tools (`xcode-select --install`).
 
 ```bash
-git clone https://github.com/spxmiguel/mac-task-manager.git  # baixa o código-fonte
-cd mac-task-manager                                           # entra na pasta do projeto
-./build_app.sh                                                # compila e empacota em TaskManager.app (assinado localmente)
-open TaskManager.app                                          # abre o app recém-compilado
+git clone https://github.com/spxmiguel/mac-task-manager.git  # download the source code
+cd mac-task-manager                                           # enter the project folder
+./build_app.sh                                                # builds and packages into TaskManager.app (locally signed)
+open TaskManager.app                                          # opens the freshly built app
 ```
 
-O script `build_app.sh` compila em modo release, empacota em `TaskManager.app` e assina localmente (ad-hoc) para o Gatekeeper não bloquear.
+The `build_app.sh` script builds in release mode, packages it into `TaskManager.app`, and signs it locally (ad-hoc) so Gatekeeper doesn't block it.
 
-Para iterar rápido sem empacotar (compila e já roda direto, sem gerar o `.app`):
+To iterate quickly without packaging (builds and runs directly, without producing the `.app`):
 
 ```bash
 swift run
@@ -97,22 +97,22 @@ swift run
 
 ---
 
-## Estrutura
+## Structure
 
 ```
 Sources/TaskManager/
-├── AppDelegate.swift        # janela principal, ícone da barra de menu, liga o atalho global
-├── HotKeyManager.swift      # atalho global via Carbon Event Manager (não pede permissão de Acessibilidade)
-├── ProcessMonitor.swift     # snapshot de processos via `ps`
-├── SystemStats.swift        # CPU / memória / disco via Mach/Darwin
-├── SettingsStore.swift      # persistência do atalho escolhido
-└── Views/                   # telas SwiftUI (Processos, Desempenho, Ajustes)
+├── AppDelegate.swift        # main window, menu bar icon, wires up the global shortcut
+├── HotKeyManager.swift      # global shortcut via Carbon Event Manager (no Accessibility permission needed)
+├── ProcessMonitor.swift     # process snapshot via `ps`
+├── SystemStats.swift        # CPU / memory / disk via Mach/Darwin
+├── SettingsStore.swift      # persists the chosen shortcut
+└── Views/                   # SwiftUI screens (Processes, Performance, Settings)
 ```
 
 ---
 
 <div align="center">
 
-Feito por [@spxmiguel](https://github.com/spxmiguel)
+Made by [@spxmiguel](https://github.com/spxmiguel)
 
 </div>
