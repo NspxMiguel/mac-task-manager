@@ -6,11 +6,11 @@
 
 Live process list, CPU/memory/disk graphs, and a configurable global shortcut — default `⌘⇧⎋` (Cmd+Shift+Esc) — to open it from anywhere, just like `Ctrl+Shift+Esc` on Windows.
 
-[![Release](https://img.shields.io/github/v/release/spxmiguel/mac-task-manager?label=release&color=0a84ff)](https://github.com/spxmiguel/mac-task-manager/releases)
+[![Release](https://img.shields.io/github/v/release/NspxMiguel/mac-task-manager?label=release&color=0a84ff)](https://github.com/NspxMiguel/mac-task-manager/releases)
 [![Platform](https://img.shields.io/badge/platform-macOS%2013%2B-black?logo=apple)](#requirements)
 [![Swift](https://img.shields.io/badge/Swift-SwiftUI%20%2B%20AppKit-orange?logo=swift)](#structure)
 [![Homebrew](https://img.shields.io/badge/homebrew-cask-fbb040?logo=homebrew)](#installation)
-[![License](https://img.shields.io/github/license/spxmiguel/mac-task-manager?color=lightgrey)](LICENSE)
+[![License](https://img.shields.io/github/license/NspxMiguel/mac-task-manager?color=lightgrey)](LICENSE)
 
 </div>
 
@@ -38,8 +38,8 @@ Follows the system's light/dark theme automatically (System Settings > General >
 The easiest way, via [Homebrew](https://brew.sh):
 
 ```bash
-brew tap spxmiguel/tap                              # adds my personal package repo to Homebrew
-brew trust --cask spxmiguel/tap/task-manager        # trusts the tap (a safety gate for third-party taps — since this one is mine, it's safe to trust)
+brew tap NspxMiguel/tap                              # adds my personal package repo to Homebrew
+brew trust --cask NspxMiguel/tap/task-manager        # trusts the tap (a safety gate for third-party taps — since this one is mine, it's safe to trust)
 brew install --cask task-manager                    # downloads the source code and builds the app on your machine
 ```
 
@@ -81,7 +81,7 @@ Focused on the essentials (Processes, Performance, Settings) — doesn't cover W
 Requires the Xcode Command Line Tools (`xcode-select --install`).
 
 ```bash
-git clone https://github.com/spxmiguel/mac-task-manager.git  # download the source code
+git clone https://github.com/NspxMiguel/mac-task-manager.git  # download the source code
 cd mac-task-manager                                           # enter the project folder
 ./build_app.sh                                                # builds and packages into TaskManager.app (locally signed)
 open TaskManager.app                                          # opens the freshly built app
@@ -113,6 +113,6 @@ Sources/TaskManager/
 
 <div align="center">
 
-Made by [@spxmiguel](https://github.com/spxmiguel)
+Made by [@NspxMiguel](https://github.com/NspxMiguel)
 
 </div>
