@@ -116,3 +116,7 @@ Sources/TaskManager/
 Made by [@NspxMiguel](https://github.com/NspxMiguel)
 
 </div>
+
+## Support
+
+Free and open source. If it saved you time, pay what it was worth at [nspx.dev/loja](https://www.nspx.dev/loja/) — any amount, no account.
