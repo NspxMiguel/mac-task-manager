@@ -32,7 +32,7 @@ struct ContentView: View {
         HStack(spacing: 0) {
             sidebar
 
-            Divider().overlay(Theme.separator)
+            Rectangle().fill(Theme.separator).frame(width: 1)
 
             Group {
                 switch selection {
@@ -57,7 +57,7 @@ struct ContentView: View {
 
             Spacer()
         }
-        .frame(width: 64)
+        .frame(width: 72)
         .background(Theme.sidebarBackground)
     }
 
@@ -70,17 +70,18 @@ struct ContentView: View {
                 Image(systemName: section.icon)
                     .font(.system(size: 16, weight: isSelected ? .semibold : .regular))
                 Text(section.label)
-                    .font(.system(size: 9))
+                    .font(.system(size: 10, weight: isSelected ? .semibold : .regular))
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
-            .foregroundStyle(isSelected ? .white : .secondary)
-            .frame(width: 52, height: 48)
+            .foregroundStyle(isSelected ? Theme.accent : .secondary)
+            .frame(width: 56, height: 50)
             .contentShape(Rectangle())
             .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Theme.accent.opacity(0.85) : .clear)
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(isSelected ? Theme.accent.opacity(0.14) : .clear)
             )
+            .animation(.timingCurve(0.2, 0.8, 0.2, 1, duration: 0.15), value: isSelected)
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 6)

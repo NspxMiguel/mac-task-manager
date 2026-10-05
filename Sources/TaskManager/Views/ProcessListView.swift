@@ -99,11 +99,12 @@ struct ProcessListView: View {
                         .font(.system(size: 12))
                     TextField(tr(en: "Search process or PID", pt: "Buscar processo ou PID"), text: $model.searchText)
                         .textFieldStyle(.plain)
-                        .font(.system(size: 12))
+                        .font(.system(size: 13))
                 }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(RoundedRectangle(cornerRadius: 7).fill(Theme.controlBackground))
+                .padding(.horizontal, 14)
+                .frame(height: 32)
+                .frame(maxWidth: 320)
+                .background(Capsule().fill(Theme.controlBackground))
 
                 Spacer()
 
@@ -121,23 +122,21 @@ struct ProcessListView: View {
                 Button {
                     model.endSelectedTasks()
                 } label: {
-                    Label(endTaskLabel, systemImage: "xmark.octagon.fill")
-                        .font(.system(size: 12, weight: .medium))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .contentShape(Rectangle())
+                    Text(endTaskLabel)
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 16)
+                        .frame(height: 32)
+                        .contentShape(Capsule())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(model.selectedPIDs.isEmpty ? Color.secondary : Color.white)
                 .background(
-                    RoundedRectangle(cornerRadius: 7)
-                        .fill(model.selectedPIDs.isEmpty ? Theme.controlBackground : Color.red.opacity(0.85))
+                    Capsule().fill(model.selectedPIDs.isEmpty ? Theme.controlBackground : Theme.danger)
                 )
                 .disabled(model.selectedPIDs.isEmpty)
             }
-            .padding(12)
-
-            Divider().overlay(Theme.separator)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 14)
 
             header
 
@@ -148,7 +147,9 @@ struct ProcessListView: View {
                     ForEach(model.filteredSorted) { proc in
                         ProcessRow(process: proc)
                             .background(
-                                model.selectedPIDs.contains(proc.pid) ? Theme.accent.opacity(0.35) : Color.clear
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(model.selectedPIDs.contains(proc.pid) ? Theme.accent.opacity(0.22) : Color.clear)
+                                    .padding(.horizontal, 10)
                             )
                             .contentShape(Rectangle())
                             .onTapGesture {
@@ -159,9 +160,9 @@ struct ProcessListView: View {
                                     model.endTask(pid: proc.pid)
                                 }
                             }
-                        Divider().overlay(Theme.separator)
                     }
                 }
+                .padding(.vertical, 4)
             }
         }
         .background(Theme.contentBackground)
@@ -201,13 +202,16 @@ struct ProcessListView: View {
         HStack(spacing: 0) {
             headerButton(.name, width: nil, alignment: .leading)
             headerButton(.pid, width: 70, alignment: .trailing)
-            headerButton(.cpu, width: 80, alignment: .trailing)
-            headerButton(.memory, width: 100, alignment: .trailing)
+            headerButton(.cpu, width: 84, alignment: .trailing)
+            headerButton(.memory, width: 96, alignment: .trailing)
         }
-        .font(.caption.bold())
+        .font(.system(size: 11, weight: .bold))
+        .textCase(.uppercase)
+        .tracking(1)
         .foregroundStyle(.secondary)
-        .padding(.horizontal, 22)
-        .padding(.vertical, 6)
+        .padding(.horizontal, 24)
+        .padding(.bottom, 8)
+        .overlay(alignment: .bottom) { Rectangle().fill(Theme.separator).frame(height: 1) }
     }
 
     private func headerButton(_ field: SortField, width: CGFloat?, alignment: Alignment) -> some View {
@@ -237,45 +241,65 @@ struct ProcessRow: View {
     let process: ProcessInfoEntry
 
     private var cpuFraction: Double { process.cpuPercent / 100 }
-    private var memFraction: Double { min(process.memoryMB / 1024, 1) }
 
     var body: some View {
         HStack(spacing: 0) {
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(Theme.accent.opacity(0.6))
-                    .frame(width: 6, height: 6)
+            HStack(spacing: 10) {
+                ProcessIcon(pid: process.pid)
                 Text(process.name)
+                    .font(.system(size: 13))
                     .lineLimit(1)
+                    .truncationMode(.middle)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            Text("\(process.pid)")
+            Text(verbatim: "\(process.pid)")
                 .frame(width: 70, alignment: .trailing)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.tertiary)
 
-            heatCell(String(format: "%.1f%%", process.cpuPercent), fraction: cpuFraction, width: 80)
-                .foregroundStyle(process.cpuPercent > 50 ? .red : .primary)
+            Text(String(format: "%.1f%%", process.cpuPercent))
+                .frame(width: 84, alignment: .trailing)
+                .padding(.vertical, 3)
+                .background(alignment: .trailing) {
+                    Capsule().fill(Theme.heat(cpuFraction * 2)).frame(width: 60)
+                        .padding(.trailing, -6)
+                }
+                .foregroundStyle(process.cpuPercent >= 50 ? Theme.danger : .primary)
 
-            heatCell(String(format: "%.0f MB", process.memoryMB), fraction: memFraction, width: 100)
-                .foregroundStyle(.secondary)
+            Text(process.memoryMB.megabytesText)
+                .frame(width: 96, alignment: .trailing)
+                .foregroundStyle(process.memoryMB >= 1024 ? .primary : .secondary)
         }
         .font(.system(size: 12, design: .monospaced))
-        .padding(.horizontal, 22)
-        .padding(.vertical, 6)
+        .padding(.horizontal, 24)
+        .frame(height: 32)
+    }
+}
+
+/// The app's own icon for apps, a quiet generic glyph for daemons. Cached by
+/// pid so scrolling a few hundred rows does not hit NSWorkspace every frame.
+private struct ProcessIcon: View {
+    let pid: Int32
+    private static var cache: [Int32: NSImage] = [:]
+
+    var body: some View {
+        Group {
+            if let image = Self.icon(for: pid) {
+                Image(nsImage: image).resizable()
+            } else {
+                Image(systemName: "gearshape")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .frame(width: 18, height: 18)
     }
 
-    private func heatCell(_ text: String, fraction: Double, width: CGFloat) -> some View {
-        Text(text)
-            .frame(width: width, alignment: .trailing)
-            .padding(.vertical, 2)
-            .background(
-                HStack {
-                    Spacer(minLength: 0)
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(Theme.heat(fraction))
-                        .frame(width: width)
-                }
-            )
+    private static func icon(for pid: Int32) -> NSImage? {
+        if let cached = cache[pid] { return cached }
+        guard let app = NSRunningApplication(processIdentifier: pid), app.bundleURL != nil,
+              let icon = app.icon else { return nil }
+        cache[pid] = icon
+        return icon
     }
 }
