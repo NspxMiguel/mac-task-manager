@@ -16,14 +16,16 @@ final class SystemStatsReader {
     private var previousCPUTicks: (user: UInt32, system: UInt32, idle: UInt32, nice: UInt32)?
 
     func snapshot() -> SystemSnapshot {
-        SystemSnapshot(
+        let memory = readMemory()
+        let disk = readDisk()
+        return SystemSnapshot(
             cpuUsage: readCPUUsage(),
-            memoryUsedGB: readMemory().used,
-            memoryTotalGB: readMemory().total,
-            memoryUsedFraction: readMemory().fraction,
-            diskUsedGB: readDisk().used,
-            diskTotalGB: readDisk().total,
-            diskUsedFraction: readDisk().fraction
+            memoryUsedGB: memory.used,
+            memoryTotalGB: memory.total,
+            memoryUsedFraction: memory.fraction,
+            diskUsedGB: disk.used,
+            diskTotalGB: disk.total,
+            diskUsedFraction: disk.fraction
         )
     }
 
@@ -70,23 +72,34 @@ final class SystemStatsReader {
             }
         }
 
+        // Memory is sold and shown in binary units: an 18 GB Mac has 18 GiB.
+        // Dividing by 1e9 made it read 19.3 GB.
+        let gib = 1_073_741_824.0
         let pageSize = Double(vm_kernel_page_size)
-        guard result == KERN_SUCCESS else { return (0, Double(totalMemBytes) / 1e9, 0) }
+        guard result == KERN_SUCCESS else { return (0, Double(totalMemBytes) / gib, 0) }
 
-        let used = Double(vmStats.active_count + vmStats.wire_count + vmStats.compressor_page_count) * pageSize
-        let totalGB = Double(totalMemBytes) / 1e9
-        let usedGB = used / 1e9
+        // Activity Monitor's "Memory Used" = App Memory + Wired + Compressed,
+        // where App Memory is anonymous memory minus what the system may purge.
+        // `active_count` mixes in file cache and leaves out inactive app pages.
+        let appPages = Double(vmStats.internal_page_count) - Double(vmStats.purgeable_count)
+        let used = (max(appPages, 0) + Double(vmStats.wire_count) + Double(vmStats.compressor_page_count)) * pageSize
+        let totalGB = Double(totalMemBytes) / gib
+        let usedGB = used / gib
         let fraction = totalGB > 0 ? min(max(usedGB / totalGB, 0), 1) : 0
         return (usedGB, totalGB, fraction)
     }
 
     private func readDisk() -> (used: Double, total: Double, fraction: Double) {
-        var fs = statfs()
-        guard statfs("/", &fs) == 0 else { return (0, 0, 0) }
-        let blockSize = Double(fs.f_bsize)
-        let totalBytes = Double(fs.f_blocks) * blockSize
-        let freeBytes = Double(fs.f_bfree) * blockSize
-        let usedBytes = totalBytes - freeBytes
+        // "Available for important usage" is what Finder and System Settings
+        // show: free space plus purgeable caches the system will clear on
+        // demand. Raw free blocks undercount it on APFS.
+        let keys: Set<URLResourceKey> = [.volumeTotalCapacityKey, .volumeAvailableCapacityForImportantUsageKey]
+        guard let values = try? URL(fileURLWithPath: "/").resourceValues(forKeys: keys),
+              let total = values.volumeTotalCapacity,
+              let available = values.volumeAvailableCapacityForImportantUsage
+        else { return (0, 0, 0) }
+        let totalBytes = Double(total)
+        let usedBytes = max(totalBytes - Double(available), 0)
         let totalGB = totalBytes / 1e9
         let usedGB = usedBytes / 1e9
         let fraction = totalGB > 0 ? min(max(usedGB / totalGB, 0), 1) : 0
