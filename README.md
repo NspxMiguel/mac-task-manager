@@ -12,6 +12,15 @@ Live process list, CPU/memory/disk graphs, and a configurable global shortcut �
 [![Homebrew](https://img.shields.io/badge/homebrew-cask-fbb040?logo=homebrew)](#installation)
 [![License](https://img.shields.io/github/license/NspxMiguel/mac-task-manager?color=lightgrey)](LICENSE)
 
+<p>
+  <a href="#screenshots">Screenshots</a> ·
+  <a href="#installation">Install</a> ·
+  <a href="#whats-included">What's included</a> ·
+  <a href="#requirements">Requirements</a> ·
+  <a href="#build-from-source">Build</a> ·
+  <a href="#structure">Structure</a>
+</p>
+
 </div>
 
 ---
@@ -76,7 +85,8 @@ Focused on the essentials (Processes, Performance, Settings) — doesn't cover W
 
 ---
 
-## Build from source
+<details>
+<summary><h2 style="display:inline">Build from source</h2></summary>
 
 Requires the Xcode Command Line Tools (`xcode-select --install`).
 
@@ -95,9 +105,12 @@ To iterate quickly without packaging (builds and runs directly, without producin
 swift run
 ```
 
+</details>
+
 ---
 
-## Structure
+<details>
+<summary><h2 style="display:inline">Structure</h2></summary>
 
 ```
 Sources/TaskManager/
@@ -108,6 +121,8 @@ Sources/TaskManager/
 ├── SettingsStore.swift      # persists the chosen shortcut
 └── Views/                   # SwiftUI screens (Processes, Performance, Settings)
 ```
+
+</details>
 
 ---
 
